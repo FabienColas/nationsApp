@@ -9,6 +9,7 @@ class Nations {
   List<int>    _population = [];
   List<String> _countries = [];
   List<Nation> _nation = [];
+  List<Nation> _searchedNation = [];
   String name;
   Nations(List<dynamic> json) {
     int i = 0;
@@ -21,6 +22,28 @@ class Nations {
       }
       i++;
     }
+  }
+
+  void setNation(List<Nation> nationList) {
+    this._nation = nationList;
+  }
+
+  List<Nation> getSearchingField(String search) {
+    int i = 0;
+    String nationName;
+    print("TOTAL LENGTH=>" + _nation.length.toString());
+    while (i < _nation.length) {
+      nationName = _nation[i].name.toLowerCase();
+      print("Nation=> "+nationName);
+      print(i.toString());
+      if (nationName.contains(search.toLowerCase())) {
+        _searchedNation.add(_nation[i]);
+      }
+      i++;
+    }
+      print(_searchedNation.length.toString());
+
+    return _searchedNation;
   }
 
   void addNation(List<dynamic> json, index) {
@@ -40,7 +63,11 @@ class Nations {
   }
 
   int getNationsNumber() {
-    return _nation.length;
+    if (_nation.length == 0) {
+      return 0;
+    } else {
+      return _nation.length;
+    }
   }
 
   Map<String, int> getGraphData() {

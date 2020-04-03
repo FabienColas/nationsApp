@@ -15,8 +15,11 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   Future<Nations> _allNations;
   Nations _nations;
+  Nations _searchNations;
+  List<Nation> _searchNationList;
   GlobalKey<RefreshIndicatorState> _refreshey;
-  int _selectedIndex = 0;
+
+  TextEditingController _searchString = TextEditingController();
 
   @override
   void initState() {
@@ -24,12 +27,7 @@ class _HomePageState extends State<HomePage> {
     super.initState();
   }
 
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
-
+  //Dialog that pop ups on listview item click
   Future<void> _nationDialog(BuildContext context, Nation nation) {
     return showDialog<void>(
       context: context,
@@ -90,7 +88,15 @@ class _HomePageState extends State<HomePage> {
   }
   
   Widget buildHomePage(Nations _nationsData) {
-    _nations = _nationsData;
+    String searchString = _searchString.text;
+    print("Search=> "+searchString);
+    if (searchString == "") {
+      print("Nice");
+      _nations = _nationsData;
+    } else {
+      _nations = _searchNations;
+    }
+
     return Scaffold(
       body: SafeArea(
         //Set to true to avoid rendering issues with different devices
@@ -106,6 +112,47 @@ class _HomePageState extends State<HomePage> {
         },
         child: Column(
           children: <Widget>[
+                Row(
+                  mainAxisSize: MainAxisSize.max,
+                  children: <Widget>[
+                    Expanded(
+                      child: Container(
+                          margin: EdgeInsets.only(left: 10, right: 10, bottom: 20),
+                          child :TextField(
+                            controller: _searchString,
+                            decoration: InputDecoration(
+                                labelText: "Any particular Country ?",
+                                prefixIcon: Icon(Icons.textsms),
+                                border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.all(Radius.circular(25.0)))),
+                          )
+                      ),
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(right: 10),
+                      child: FloatingActionButton(
+                        heroTag: "search",
+                        onPressed: () {
+                          if (_searchString.text == "") {
+                            _nations = _searchNations;
+                            setState(() {
+
+                            });
+                            return;
+                          }
+                          _searchNationList = _nationsData.getSearchingField(_searchString.text);
+                          _nationsData.setNation(_searchNationList);
+                          _searchNations = _nationsData;
+                          setState(() {
+
+                          });
+                        },
+                        child: Icon(Icons.search,),
+                        backgroundColor: Colors.blue,
+                      ),
+                    )
+              ]
+            ),
             Expanded(
                 child: Container(
                     margin: EdgeInsets.only(right: 10, left: 10, top: 10, bottom: 10),
