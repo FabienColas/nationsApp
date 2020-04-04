@@ -1,16 +1,10 @@
 # nationsApp
 
-A new Flutter project.
+A Flutter project.
 
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Rules
+- Pouvoir rafraichir la liste 
+- Afficher les drapeaux, le nom du pays, le nombre d’habitants, la population la langue et la monnaie dans la liste
+- Ajouter un composant de recherche qui filtre la liste en direct
+- Afficher une vue avec le reste des infos que vous souhaitez au clic sur une ligne dans une nouvelle vue
+- Afficher une vue statistique avec un graphique montrant la population par ordre décroissant 
