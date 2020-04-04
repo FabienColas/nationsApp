@@ -73,8 +73,9 @@ class _HomePageState extends State<HomePage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     Container(
+                      width: 50,
                       margin: EdgeInsets.only(bottom: 10),
-                      child: SvgPicture.network(nation.flag, height: 50, width: 50,)
+                      child: SvgPicture.network(nation.flag, height: 50, width: 50)
                     )
                   ],
                 ),
@@ -83,10 +84,11 @@ class _HomePageState extends State<HomePage> {
                   children: <Widget>[
                     Container(
                       margin: EdgeInsets.only(right: 10),
-                        child: Text("Region:", style: TextStyle(fontWeight: FontWeight.bold),)
+                        child: Text("Region:", style: TextStyle(fontWeight: FontWeight.bold))
                     ),
                     Container(
-                      child: Text(nation.region),
+                      width: 150,
+                      child: Text(nation.region, maxLines: 2,),
                     )
                   ],
                 ),
@@ -98,7 +100,8 @@ class _HomePageState extends State<HomePage> {
                         child: Text("Subregion:", style: TextStyle(fontWeight: FontWeight.bold))
                     ),
                     Container(
-                        child: Text(nation.subregion),
+                        width: 150,
+                        child: Text(nation.subRegion, maxLines: 2),
                     )
                   ],
                 ),
@@ -144,7 +147,7 @@ class _HomePageState extends State<HomePage> {
                           child :TextField(
                             controller: _searchString,
                             decoration: InputDecoration(
-                                labelText: "Any particular Country ?",
+                                labelText: "Any particular country ?",
                                 prefixIcon: Icon(Icons.textsms),
                                 border: OutlineInputBorder(
                                     borderRadius: BorderRadius.all(Radius.circular(25.0)))),
@@ -212,7 +215,7 @@ class _HomePageState extends State<HomePage> {
           onPressed: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => GraphPage(nations: this._mainNations)),
+              MaterialPageRoute(builder: (context) => GraphPage(this._mainNations)),
             );
           },
     )

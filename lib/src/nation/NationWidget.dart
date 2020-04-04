@@ -10,7 +10,7 @@ class Nation extends StatefulWidget {
   final String language;
   final String currency;
   final String region;
-  final String subregion;
+  final String subRegion;
 
   const Nation(
       this.name,
@@ -20,7 +20,7 @@ class Nation extends StatefulWidget {
       this.language,
       this.currency,
       this.region,
-      this.subregion
+      this.subRegion
       );
   @override
   _NationState createState() => new _NationState();
@@ -42,10 +42,11 @@ class _NationState extends State<Nation> {
                             margin: EdgeInsets.only(top: 10),
                             child: SvgPicture.network(widget.flag,height: 50, width: 50)
                           ),
-                          Container(
-                            width: 100,
+                          Expanded(
+                            child: Container(
                               margin: EdgeInsets.only(top: 10, bottom: 10, left: 15),
                               child: Text(widget.name, style: TextStyle(fontWeight:FontWeight.bold, fontSize: 18), maxLines: 2,)
+                            )
                           ),
                         ]
                       ),
@@ -80,8 +81,8 @@ class _NationState extends State<Nation> {
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: <Widget>[
-                                      Container(
-                                        child: Text(widget.pop),
+                                      Flexible(
+                                        child: Text(widget.pop, overflow: TextOverflow.fade,),
                                       ),
                                     ],
                                   )
@@ -92,6 +93,7 @@ class _NationState extends State<Nation> {
                     ]
                 )
             )
-        ));
+        )
+    );
   }
 }
