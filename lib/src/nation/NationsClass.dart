@@ -1,16 +1,15 @@
-/*
- * Nation Class declaration and implementation
- *
- */
 import 'package:nationsApp/src/nation/NationWidget.dart';
 
+
+// Nation Class declaration and implementation
 class Nations {
   Map<String, int> _graphData = {};
   List<int>    _population = [];
   List<String> _countries = [];
   List<Nation> _nation = [];
   List<Nation> _searchedNation = [];
-  String name;
+
+  // Nations main constructor with the API request
   Nations(List<dynamic> json) {
     int i = 0;
     while (json.length > i) {
@@ -24,28 +23,34 @@ class Nations {
     }
   }
 
+  // Method to copy an instance of Nations to an other
+  Nations.fromNations(Nations main) {
+    _graphData = main._graphData;
+    _population = main._population;
+    _countries = main._countries;
+    _nation = main._nation;
+  }
+
   void setNation(List<Nation> nationList) {
     this._nation = nationList;
   }
 
+  // Method that will return all Nation object that contain the search string in there name
   List<Nation> getSearchingField(String search) {
     int i = 0;
     String nationName;
-    print("TOTAL LENGTH=>" + _nation.length.toString());
+    _searchedNation = [];
     while (i < _nation.length) {
       nationName = _nation[i].name.toLowerCase();
-      print("Nation=> "+nationName);
-      print(i.toString());
       if (nationName.contains(search.toLowerCase())) {
         _searchedNation.add(_nation[i]);
       }
       i++;
     }
-      print(_searchedNation.length.toString());
-
     return _searchedNation;
   }
 
+  // Method that add a new Nation object to the List _nations
   void addNation(List<dynamic> json, index) {
     this._nation.add(Nation(
         json[index]["name"] as String,
@@ -63,11 +68,7 @@ class Nations {
   }
 
   int getNationsNumber() {
-    if (_nation.length == 0) {
-      return 0;
-    } else {
       return _nation.length;
-    }
   }
 
   Map<String, int> getGraphData() {

@@ -29,44 +29,60 @@ class Nation extends StatefulWidget {
 class _NationState extends State<Nation> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-        margin: EdgeInsets.only(bottom: 8.0),
-        child: Card(
+    return (Card(
             child: Container(
-                height: 120,
-                margin: EdgeInsets.only(left: 10.0, right: 5.0),
-                child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
+                margin: EdgeInsets.only(left: 10, right: 5, bottom: 8),
+                child: Wrap(
                     children: <Widget>[
-                      Container(
-                        child: SvgPicture.network( widget.flag,height: 30, width: 30,) //"https://images-na.ssl-images-amazon.com/images/I/21I0GgEY57L._AC_SX425_.jpg", height: 50, width: 50,),
+                      //Draw Flag with Nation's name
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: <Widget> [
+                          Container(
+                            margin: EdgeInsets.only(top: 10),
+                            child: SvgPicture.network(widget.flag,height: 50, width: 50)
+                          ),
+                          Container(
+                            width: 100,
+                              margin: EdgeInsets.only(top: 10, bottom: 10, left: 15),
+                              child: Text(widget.name, style: TextStyle(fontWeight:FontWeight.bold, fontSize: 18), maxLines: 2,)
+                          ),
+                        ]
                       ),
+                      //Draw the Card content with Nation's data
                       Container(
                           constraints: BoxConstraints(maxWidth: 280),
-                          margin: EdgeInsets.only(left: 20),
+                          margin: EdgeInsets.only(left: 20, top: 10),
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            crossAxisAlignment: CrossAxisAlignment.start,
                             mainAxisSize: MainAxisSize.min,
                             children: <Widget>[
-                              Container(
-                                  margin: EdgeInsets.only(top: 10, bottom: 10),
-                                  child: Text(widget.name, style: TextStyle(fontWeight:FontWeight.bold, fontSize: 18), maxLines: 2,)
-                              ),
-                              Container(
+                               Container(
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: <Widget>[
                                       Container(
-                                        width: 100,
+                                        width: 70,
                                         child: Text(widget.currency, maxLines: 2,),
                                       ),
                                       Container(
                                         child: Text(widget.language),
                                       ),
                                       Container(
+                                        margin: EdgeInsets.only(left: 10.0),
                                         child: Text(NumberFormat.compact().format(widget.nbPop)),
                                       )
+                                    ],
+                                  )
+                              ),
+                              Container(
+                                  margin: EdgeInsets.only(left: 20, top: 10),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: <Widget>[
+                                      Container(
+                                        child: Text(widget.pop),
+                                      ),
                                     ],
                                   )
                               ),
@@ -74,7 +90,8 @@ class _NationState extends State<Nation> {
                           )
                       )
                     ]
-                ))
+                )
+            )
         ));
   }
 }

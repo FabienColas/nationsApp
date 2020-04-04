@@ -8,7 +8,6 @@ Future<Nations> fetchNations() async {
 
   // If the server did return a 200 OK response,
   if (response.statusCode == 200) {
-    print("OK");
     // send it to Nation Class to parse the JSON.
     return Nations(json.decode(response.body));
   } else {

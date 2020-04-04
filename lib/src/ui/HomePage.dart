@@ -14,20 +14,51 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   Future<Nations> _allNations;
+
+  Nations _mainNations;
   Nations _nations;
   Nations _searchNations;
+
   List<Nation> _searchNationList;
-  GlobalKey<RefreshIndicatorState> _refreshey;
+
+  GlobalKey<RefreshIndicatorState> _refreshKey;
+
+  bool isInit = false;
 
   TextEditingController _searchString = TextEditingController();
 
   @override
   void initState() {
+    // Send request to the API and build our Main Object
     _allNations = fetchNations();
     super.initState();
   }
 
-  //Dialog that pop ups on listview item click
+  // function that will find countries that contains the searchable String
+  void _searchInNations() {
+    if (_searchString.text == "") {
+      _nations = Nations.fromNations(_mainNations);
+      setState(() {});
+      return;
+    }
+    _searchNationList = _mainNations.getSearchingField(_searchString.text);
+    _nations.setNation(_searchNationList);
+    _searchNations = Nations.fromNations(_nations);
+    setState(() {});
+  }
+
+  // function that will pick the right Nations, depending if we are searching or not
+  void _pickRightList() {
+    String searchString = _searchString.text;
+
+    if (searchString == "") {
+      _nations = Nations.fromNations(_mainNations);
+    } else {
+      _nations = Nations.fromNations(_searchNations);
+    }
+  }
+
+  //Dialog that pops up on listview item click to print additional content about a specific country
   Future<void> _nationDialog(BuildContext context, Nation nation) {
     return showDialog<void>(
       context: context,
@@ -67,10 +98,10 @@ class _HomePageState extends State<HomePage> {
                         child: Text("Subregion:", style: TextStyle(fontWeight: FontWeight.bold))
                     ),
                     Container(
-                      child: Text(nation.subregion),
+                        child: Text(nation.subregion),
                     )
                   ],
-                )
+                ),
               ],
             ),
           ),
@@ -87,15 +118,9 @@ class _HomePageState extends State<HomePage> {
     );
   }
   
-  Widget buildHomePage(Nations _nationsData) {
-    String searchString = _searchString.text;
-    print("Search=> "+searchString);
-    if (searchString == "") {
-      print("Nice");
-      _nations = _nationsData;
-    } else {
-      _nations = _searchNations;
-    }
+  Widget buildHomePage() {
+
+    _pickRightList();
 
     return Scaffold(
       body: SafeArea(
@@ -103,11 +128,9 @@ class _HomePageState extends State<HomePage> {
         bottom: true,
         top: true,
         child: RefreshIndicator(
-          key: _refreshey,
+          key: _refreshKey,
           onRefresh: () {
-            setState(() {
-
-            });
+            setState(() {});
             return _allNations = fetchNations();
         },
         child: Column(
@@ -117,7 +140,7 @@ class _HomePageState extends State<HomePage> {
                   children: <Widget>[
                     Expanded(
                       child: Container(
-                          margin: EdgeInsets.only(left: 10, right: 10, bottom: 20),
+                          margin: EdgeInsets.only(left: 10, right: 10, bottom: 5, top: 5),
                           child :TextField(
                             controller: _searchString,
                             decoration: InputDecoration(
@@ -133,19 +156,7 @@ class _HomePageState extends State<HomePage> {
                       child: FloatingActionButton(
                         heroTag: "search",
                         onPressed: () {
-                          if (_searchString.text == "") {
-                            _nations = _searchNations;
-                            setState(() {
-
-                            });
-                            return;
-                          }
-                          _searchNationList = _nationsData.getSearchingField(_searchString.text);
-                          _nationsData.setNation(_searchNationList);
-                          _searchNations = _nationsData;
-                          setState(() {
-
-                          });
+                          _searchInNations();
                         },
                         child: Icon(Icons.search,),
                         backgroundColor: Colors.blue,
@@ -159,7 +170,7 @@ class _HomePageState extends State<HomePage> {
                     child: ListView.builder(
                       itemCount: _nations.getNationsNumber(),
                       shrinkWrap: true,
-                      itemBuilder: (BuildContext ctxt, int index) {
+                      itemBuilder: (BuildContext context, int index) {
                         return GestureDetector(
                             onTap: () {
                               _nationDialog(context, _nations.getNation(index));
@@ -167,13 +178,12 @@ class _HomePageState extends State<HomePage> {
                             child: _nations.getNation(index)
                         );
                       },
-
                     )
-                )
-            )
-          ],
-        ),
-      )
+                  )
+              )
+            ],
+          ),
+       )
       )
     );
   }
@@ -185,7 +195,11 @@ class _HomePageState extends State<HomePage> {
           future: _allNations,
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.done) {
-              return buildHomePage(snapshot.data);
+              if (!isInit) {
+                _mainNations = Nations.fromNations(snapshot.data);
+                isInit = false;
+              }
+              return buildHomePage();
             } else {
               return Center(
                   child: CircularProgressIndicator()
@@ -198,7 +212,7 @@ class _HomePageState extends State<HomePage> {
           onPressed: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => GraphPage(nations: this._nations)),
+              MaterialPageRoute(builder: (context) => GraphPage(nations: this._mainNations)),
             );
           },
     )
